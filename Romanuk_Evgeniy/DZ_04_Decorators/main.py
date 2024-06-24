@@ -1,21 +1,16 @@
 def cache_results_for_calls(func):
-    counter = 1
-    result = 0
+    cache = {}
+    call_count = {}
 
     def wrapper(*args):
-        nonlocal counter
-        nonlocal result
-
-        if counter == 1:
-            result = func(*args)
-            counter += 1
-            return result
-        elif counter < 3:
-            counter += 1
-            return result
+        if args in cache and call_count.get(args, 0) < 3:
+            call_count[args] = call_count.get(args, 0) + 1
+            return f"Return cached {cache[args]}"
         else:
-            counter = 1
-            return result
+            result = func(*args)
+            cache[args] = result
+            call_count[args] = 1
+            return f"Return computed {result}"
 
     return wrapper
 
@@ -37,8 +32,8 @@ print(sum_of_args(1, 2))
 print(sum_of_args(2, 5))
 print(sum_of_args(4, 2))
 print(sum_of_args(6, 2))
-print(sum_of_args(6, 3))
-print(sum_of_args(6, 3))
+print(sum_of_args(6, 2))
+print(sum_of_args(2, 5))
 
 print(multiplication_of_args(2, 3))
 print(multiplication_of_args(2, 3))
@@ -47,3 +42,6 @@ print(multiplication_of_args(5, 3))
 print(multiplication_of_args(4, 3))
 print(multiplication_of_args(4, 3))
 print(multiplication_of_args(4, 3))
+print(multiplication_of_args(4, 3))
+print(sum_of_args(6, 2))
+
